@@ -1,9 +1,41 @@
 import React from 'react';
 import { Menu, Icon } from 'antd';
-import 'antd/dist/antd.css';
-// import './index.less'
+// import 'antd/dist/antd.css';
+import './index.less';
+
+import MenuConfig from './../../config/menuConfig';
 const SubMenu = Menu.SubMenu;
+
 class NavLeft extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			menuTreeNode: "",
+		}
+	}
+	// 递归方式自动渲染请求过来的功能模块
+	componentDidMount() {
+		const menuTreeNode = this.renderMenu(MenuConfig)
+		this.setState({
+			menuTreeNode
+		})
+	}
+	// 菜单渲染
+	renderMenu = (data) => {
+		return data.map((item) => {
+			//如果有子节点递归调用
+			if (item.children) {
+				return (
+					<SubMenu title={item.title} key={item.key}>
+						{this.renderMenu(item.children)}
+					</SubMenu>
+				)
+
+			}
+			return <Menu.Item title={item.title} key={item.key}>{item.title}</Menu.Item>
+		})
+	}
+
 	render() {
 		return (
 			<div>
@@ -12,7 +44,8 @@ class NavLeft extends React.Component {
 					<h1>Imooc Ms</h1>
 				</div>
 				<Menu theme="dark">
-					<SubMenu
+					{this.state.menuTreeNode}
+					{/* <SubMenu
 						key="sub1"
 						title={
 							<span>
@@ -25,49 +58,7 @@ class NavLeft extends React.Component {
 						<Menu.Item key="2">Option 2</Menu.Item>
 						<Menu.Item key="3">Option 3</Menu.Item>
 						<Menu.Item key="4">Option 4</Menu.Item>
-					</SubMenu>
-                    <SubMenu
-						key="sub2"
-						title={
-							<span>
-								<Icon type="mail" />
-								<span>Navigation One</span>
-							</span>
-						}
-					>
-						<Menu.Item key="1">Option 1</Menu.Item>
-						<Menu.Item key="2">Option 2</Menu.Item>
-						<Menu.Item key="3">Option 3</Menu.Item>
-						<Menu.Item key="4">Option 4</Menu.Item>
-					</SubMenu>
-                    <SubMenu
-						key="sub3"
-						title={
-							<span>
-								<Icon type="mail" />
-								<span>Navigation One</span>
-							</span>
-						}
-					>
-						<Menu.Item key="1">Option 1</Menu.Item>
-						<Menu.Item key="2">Option 2</Menu.Item>
-						<Menu.Item key="3">Option 3</Menu.Item>
-						<Menu.Item key="4">Option 4</Menu.Item>
-					</SubMenu>
-                    <SubMenu
-						key="sub4"
-						title={
-							<span>
-								<Icon type="mail" />
-								<span>Navigation One</span>
-							</span>
-						}
-					>
-						<Menu.Item key="1">Option 1</Menu.Item>
-						<Menu.Item key="2">Option 2</Menu.Item>
-						<Menu.Item key="3">Option 3</Menu.Item>
-						<Menu.Item key="4">Option 4</Menu.Item>
-					</SubMenu>
+					</SubMenu> */}
 				</Menu>
 			</div>
 		);
