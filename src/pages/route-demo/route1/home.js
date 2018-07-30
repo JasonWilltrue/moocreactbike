@@ -1,38 +1,37 @@
-import React, {Component } from "react";
-import {HashRouter,Route,Link} from 'react-router-dom';
+import React, { Component } from "react";
+import { HashRouter, Route, Link,Switch } from 'react-router-dom';
 import Main from './main';
 import About from './about';
 import Topic from './topic';
+import Err from './err';
 
-export default class Home extends Component{
-     render(){
-         <HashRouter>
+export default class Home extends Component {
+    render() {
+        return(
+        <HashRouter>
             <div>
-            <ul>
-                <li>
-                <Link to="/">Home</Link>
-                </li>
-                <li>
-                <Link to="/about">About</Link>
-                </li>
-                <li>
-                <Link to="/topics">Topics</Link>
-                </li>
-                <li>
-                <Link to="/main">Main</Link>
-                </li>
-            </ul>
+                <ul>
+                    <li>
+                        <Link to="/">Home</Link>
+                    </li>
+                    <li>
+                        <Link to="/about">About</Link>
+                    </li>
+                    <li>
+                        <Link to="/topics">Topics</Link>
+                    </li>
+                </ul>
 
-         <hr />
-      <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/about" component={About} />
-      <Route path="/topics" component={Topic} />
-      <Route path="/main" component={Main} />
-
-      </Switch>
-    </div>
-         </HashRouter>
-     }
+                <hr />
+                <Switch>
+                    <Route exact path="/" component={Main} />
+                    <Route path="/about" component={About} />
+                    <Route path="/topics" component={Topic} />
+                    <Route path="/:id" component={Err} />
+                </Switch>
+            </div>
+        </HashRouter>
+        )
+    }
 
 }

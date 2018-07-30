@@ -1,10 +1,10 @@
 import React,{Component} from 'react';
-export default class Main extends Component{
+export default class Err extends Component{
 
      render(){
          return(
             <div>
-                 this is main page主页
+                 this is 404
              </div>
          )
      }
