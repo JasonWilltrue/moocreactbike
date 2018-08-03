@@ -12,7 +12,7 @@ class Header extends React.Component {
                 <Row className="header_top">
                     <Col span="24">
                       <span>你好，管理员</span>
-                      <a href="#">退出</a>
+                      <a href="#1">退出</a>
                     </Col>
                 </Row>
                 <Row className="breadcrumb">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Icon } from 'antd';
+import { Menu } from 'antd';
 // import 'antd/dist/antd.css';
 import './index.less';
 
