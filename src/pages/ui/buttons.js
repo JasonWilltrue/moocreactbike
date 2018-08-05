@@ -5,7 +5,6 @@ export default class Buttons extends Component{
      render(){
          return(
             <div>
-                 this is Buttons page
                  <Card title="基础按钮">
                      <Button type="primary">Imooc</Button>
                      <Button type="">Imooc</Button>
