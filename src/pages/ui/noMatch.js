@@ -6,7 +6,7 @@ export default class NoMatch extends Component{
      render(){
          return(
             <div>
-                 this is 404
+                 这是404的网页吗？
              </div>
          )
      }
