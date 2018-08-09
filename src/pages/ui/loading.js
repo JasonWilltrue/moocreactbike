@@ -30,7 +30,6 @@ export default class Loading extends Component {
                     message='react'
                     description='宁确定这么做吗?'
                     type="success"
-
                 />
             </Spin>
 

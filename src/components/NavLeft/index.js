@@ -33,6 +33,7 @@ class NavLeft extends React.Component {
 				)
 
 			}
+			//跳转各个功能点
 			return <Menu.Item title={item.title} key={item.key}>
 				<NavLink to={item.key}>
 					{item.title}
