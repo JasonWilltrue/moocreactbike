@@ -8,7 +8,7 @@ class FormRegister extends Component {
     return (
       <Fragment>
         <Card title="注册表单">
-          <Form layout="horizontal">
+          <Form layout="horizontal" style={{width:300}}>
             <FormItem label="用户名">
               {getFieldDecorator("userName", {
                 // initialValue:'jack',
