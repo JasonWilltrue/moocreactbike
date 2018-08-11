@@ -67,7 +67,7 @@ export default class BasicTable extends Component {
     }).then(res=>{
       if(res.code === 0){
          this.setState({
-          dataSource2:res.list
+          dataSource2:res.result.list
          })
       }
     });
