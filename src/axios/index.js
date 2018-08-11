@@ -17,10 +17,10 @@ export default class Axios {
         //如果跨域 还需要带header  cookie
       }).then(responese => {
         //表示请求成功而已，数据不一定正确需要进一步判断
-        if (responese.status == "200") {
+        if (responese.status === 200) {
           let res = responese.data;
           //业务逻辑代码返回0
-          if (res.code == '0') {
+          if (res.code === 0) {
             resolve(res);
           } else {
             Modal.info({
