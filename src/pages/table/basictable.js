@@ -104,6 +104,7 @@ export default class BasicTable extends Component {
       })
   }
   render() {
+    //表格头
     const columns = [
       {
         title: "id",
