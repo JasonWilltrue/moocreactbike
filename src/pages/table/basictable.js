@@ -62,7 +62,8 @@ export default class BasicTable extends Component {
       data: {
         params: {
           page: 1
-        }
+        },
+        isShowLoading:true
       }
     }).then(res=>{
       if(res.code === 0){

@@ -5,6 +5,12 @@ import axios from "axios";
 import { Modal } from "antd";
 export default class Axios {
   static ajax(options) {
+    let loading;
+    if(options.data && options.data.isShowLoading !== false)
+    {
+       loading = document.getElementById("ajaxLoading");
+       loading.style.display = 'block';
+    }
     let baseUrl =
       "https://www.easy-mock.com/mock/59b09f37e0dc6633419fb9eb/antdbike";
     return new Promise((resolve, rejects) => {
@@ -16,6 +22,11 @@ export default class Axios {
         params: (options.data && options.data.params) || ""
         //如果跨域 还需要带header  cookie
       }).then(responese => {
+        if(options.data && options.data.isShowLoading !== false)
+        {
+          loading = document.getElementById("ajaxLoading");
+          loading.style.display = 'none';
+        }
         //表示请求成功而已，数据不一定正确需要进一步判断
         if (responese.status === 200) {
           let res = responese.data;
