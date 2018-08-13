@@ -13,7 +13,7 @@ export default {
            showTotal:()=>{
                 return `总共${data.result.total_count}条数据，当前第${data.result.page}页`
            },
-           showQuickJumper:true,
+           showQuickJumper:false,//是否开启分页跳转
        }
        return page;
 

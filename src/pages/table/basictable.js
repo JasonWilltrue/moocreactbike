@@ -99,6 +99,7 @@ export default class BasicTable extends Component {
             pagination:Utils.pagination(res,(current)=>{
                //TODO:跳转分页
                _this.params.page = current;  //重新赋值的页
+               console.log('进来看看几次了');
 
                this.request();
 
