@@ -1,16 +1,20 @@
 import React, { Component, Fragment } from "react";
-import { Card, Table, Modal,Button,message } from "antd";
+import { Card, Table, Modal, Button, message } from "antd";
 import axios from "./../../axios";
-
+import Utils from "../../utils/utils";
 
 export default class BasicTable extends Component {
   state = {
     dataSource: [],
     dataSource2: [],
-    selectedRowKeys:null,
-    selectedItem:[],
-    selectedRows:[],
+    selectedRowKeys: null,
+    selectedItem: [],
+    selectedRows: []
   };
+  //当前页
+  params = {
+     page:1
+  }
 
   componentDidMount() {
     //类似与表头文件
@@ -72,12 +76,13 @@ export default class BasicTable extends Component {
   // }
   //===================封装后的新写法====================
   request = () => {
+    const _this = this;
     axios
       .ajax({
         url: "/table/list1",
         data: {
           params: {
-            page: 1
+            page: this.params.page
           },
           isShowLoading: true
         }
@@ -88,44 +93,51 @@ export default class BasicTable extends Component {
             item.key = index;
           });
           this.setState({
-            dataSource2: res.result.list
+            dataSource2: res.result.list,
+            selectedRowKeys: [],
+            selectedRows: [],
+            pagination:Utils.pagination(res,(current)=>{
+               //TODO:跳转分页
+               _this.params.page = current;  //重新赋值的页
+
+               this.request();
+
+            })
           });
         }
       });
   };
   //每一行的点击事件
-  onRowClick = (record,index)=>{
-      let selectKey = [index];
-      Modal.info({
-        title:'信息',
-        content:'ID: '+record.id+'  用户名：'+record.name+','
-      })
-      this.setState({
-         selectedRowKeys:selectKey,
-         selectedItem:record,
-      })
-  }
+  onRowClick = (record, index) => {
+    let selectKey = [index];
+    Modal.info({
+      title: "信息",
+      content: "ID: " + record.id + "  用户名：" + record.name + ","
+    });
+    this.setState({
+      selectedRowKeys: selectKey,
+      selectedItem: record
+    });
+  };
 
   /**
    * 复选框删除
    */
-   handleDelete = ()=>{
-     let rows = this.state.selectedRows;
-     let ids = [];
-     rows.map((item)=>{
-       ids.push(item.id)
-     })
+  handleDelete = () => {
+    let rows = this.state.selectedRows;
+    let ids = [];
+    rows.map(item => {
+      ids.push(item.id);
+    });
 
-     Modal.confirm({
-        title:'删除提示',
-        content:`确定要删除吗？${ids}`,
-        onOk :()=>{
-           message.success('删除成功！')
-        }
-     })
-
-   }
-
+    Modal.confirm({
+      title: "删除提示",
+      content: `确定要删除吗？${ids}`,
+      onOk: () => {
+        message.success("删除成功！");
+      }
+    });
+  };
 
   render() {
     //表格头
@@ -170,11 +182,11 @@ export default class BasicTable extends Component {
     ];
 
     //定义一个数组 用于onchange切换使用
-    const {selectedRowKeys} = this.state;
+    const { selectedRowKeys } = this.state;
     const rowSelection = {
       type: "radio",
       //如果没有下面属性则点击没有选中效果
-      selectedRowKeys,
+      selectedRowKeys
     };
     const rowCheckSelection = {
       type: "checkbox",
@@ -184,20 +196,20 @@ export default class BasicTable extends Component {
        * @selectedRowKeys 行
        * @selectedRows 行对象
        */
-      onChange:(selectedRowKeys,selectedRows)=>{
-           console.log('selectedRowKeys:',selectedRowKeys);
-           console.log('selectedRows: ',selectedRows);
-          //  let ids = [];
-          // // 遍历选中的每一个行中的id
-          //  selectedRows.map((item)=>{
-          //        ids.push(item.id)
-          //  })
-            this.setState({
-              selectedRowKeys,
-              //选中id值是一个数组
-              // selectedId:ids
-              selectedRows
-            })
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log("selectedRowKeys:", selectedRowKeys);
+        console.log("selectedRows: ", selectedRows);
+        //  let ids = [];
+        // // 遍历选中的每一个行中的id
+        //  selectedRows.map((item)=>{
+        //        ids.push(item.id)
+        //  })
+        this.setState({
+          selectedRowKeys,
+          //选中id值是一个数组
+          // selectedId:ids
+          selectedRows
+        });
       }
     };
     return (
@@ -229,13 +241,13 @@ export default class BasicTable extends Component {
         >
           <Table
             bordered
-            rowSelection={rowSelection}   //单选多选  类型配置
-            onRow={(record,index) => {
+            rowSelection={rowSelection} //单选多选  类型配置
+            onRow={(record, index) => {
               return {
                 onClick: () => {
-                    this.onRowClick(record,index)
-                },       //点击行
-                onMouseEnter: () => {}     //鼠标移入行
+                  this.onRowClick(record, index);
+                }, //点击行
+                onMouseEnter: () => {} //鼠标移入行
               };
             }}
             columns={columns}
@@ -247,19 +259,19 @@ export default class BasicTable extends Component {
           title="嵌入多选列表"
           className="card-warp"
           style={{ margin: "10px 0" }}
-         >
-         <div style={{marginBottom:10}}>
-         <Button onClick={this.handleDelete}>删除</Button>
-         </div>
+        >
+          <div style={{ marginBottom: 10 }}>
+            <Button onClick={this.handleDelete}>删除</Button>
+          </div>
           <Table
             bordered
-            rowSelection={rowCheckSelection}   //单选多选  类型配置
-            onRow={(record,index) => {
+            rowSelection={rowCheckSelection} //单选多选  类型配置
+            onRow={(record, index) => {
               return {
                 onClick: () => {
-                    this.onRowClick(record,index)
-                },       //点击行
-                onMouseEnter: () => {}     //鼠标移入行
+                  this.onRowClick(record, index);
+                }, //点击行
+                onMouseEnter: () => {} //鼠标移入行
               };
             }}
             columns={columns}
@@ -271,12 +283,12 @@ export default class BasicTable extends Component {
           title="表单分页"
           className="card-warp"
           style={{ margin: "10px 0" }}
-         >
+        >
           <Table
             bordered
             columns={columns}
             dataSource={this.state.dataSource2}
-            pagination={true}
+            pagination={this.state.pagination} //分页配置
           />
         </Card>
       </Fragment>
