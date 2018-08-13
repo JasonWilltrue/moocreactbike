@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
-import { Card, Table, Modal } from "antd";
+import { Card, Table, Modal,Button,message } from "antd";
 import axios from "./../../axios";
+
 
 export default class BasicTable extends Component {
   state = {
@@ -8,6 +9,7 @@ export default class BasicTable extends Component {
     dataSource2: [],
     selectedRowKeys:null,
     selectedItem:[],
+    selectedRows:[],
   };
 
   componentDidMount() {
@@ -103,6 +105,28 @@ export default class BasicTable extends Component {
          selectedItem:record,
       })
   }
+
+  /**
+   * 复选框删除
+   */
+   handleDelete = ()=>{
+     let rows = this.state.selectedRows;
+     let ids = [];
+     rows.map((item)=>{
+       ids.push(item.id)
+     })
+
+     Modal.confirm({
+        title:'删除提示',
+        content:`确定要删除吗？${ids}`,
+        onOk :()=>{
+           message.success('删除成功！')
+        }
+     })
+
+   }
+
+
   render() {
     //表格头
     const columns = [
@@ -152,6 +176,30 @@ export default class BasicTable extends Component {
       //如果没有下面属性则点击没有选中效果
       selectedRowKeys,
     };
+    const rowCheckSelection = {
+      type: "checkbox",
+      //如果没有下面属性则点击没有选中效果
+      selectedRowKeys,
+      /**
+       * @selectedRowKeys 行
+       * @selectedRows 行对象
+       */
+      onChange:(selectedRowKeys,selectedRows)=>{
+           console.log('selectedRowKeys:',selectedRowKeys);
+           console.log('selectedRows: ',selectedRows);
+          //  let ids = [];
+          // // 遍历选中的每一个行中的id
+          //  selectedRows.map((item)=>{
+          //        ids.push(item.id)
+          //  })
+            this.setState({
+              selectedRowKeys,
+              //选中id值是一个数组
+              // selectedId:ids
+              selectedRows
+            })
+      }
+    };
     return (
       <Fragment>
         <Card title="基础表格" className="card-warp">
@@ -175,7 +223,7 @@ export default class BasicTable extends Component {
           />
         </Card>
         <Card
-          title="嵌入单选多选列表"
+          title="嵌入单选列表"
           className="card-warp"
           style={{ margin: "10px 0" }}
         >
@@ -193,6 +241,42 @@ export default class BasicTable extends Component {
             columns={columns}
             dataSource={this.state.dataSource2}
             pagination={false}
+          />
+        </Card>
+        <Card
+          title="嵌入多选列表"
+          className="card-warp"
+          style={{ margin: "10px 0" }}
+         >
+         <div style={{marginBottom:10}}>
+         <Button onClick={this.handleDelete}>删除</Button>
+         </div>
+          <Table
+            bordered
+            rowSelection={rowCheckSelection}   //单选多选  类型配置
+            onRow={(record,index) => {
+              return {
+                onClick: () => {
+                    this.onRowClick(record,index)
+                },       //点击行
+                onMouseEnter: () => {}     //鼠标移入行
+              };
+            }}
+            columns={columns}
+            dataSource={this.state.dataSource2}
+            pagination={false}
+          />
+        </Card>
+        <Card
+          title="表单分页"
+          className="card-warp"
+          style={{ margin: "10px 0" }}
+         >
+          <Table
+            bordered
+            columns={columns}
+            dataSource={this.state.dataSource2}
+            pagination={true}
           />
         </Card>
       </Fragment>
