@@ -68,7 +68,7 @@ export default class City extends Component {
     }).then(res =>{
         console.log(res);
 
-        if(res.code === 0 ){
+        if(res.code === 0){
             message.success('开通成功！')
             this.setState({
                 isShowOpenCity:false
@@ -96,15 +96,18 @@ export default class City extends Component {
         title: "用车模式",
         key: "mode",
         width: 80,
-        dataIndex: "mode"
+        dataIndex: "mode",
+        render:(op_mode)=>{
+            return op_mode === 1 ? "停车点" : "禁停区";
+          }
       },
       {
         title: "运营模式",
         key: "op_mode",
         dataIndex: "op_mode",
         width: 80,
-        render(op_mode) {
-            return op_mode === 1 ? "加盟" : "自营";
+        render:(op_mode)=> {
+            return op_mode === 1 ? "自营" : "加盟";
           }
 
       },
