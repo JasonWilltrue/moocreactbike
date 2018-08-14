@@ -1,81 +1,81 @@
 const menuList = [
   {
       title: '首页',
-      key: '/home'
+      key: '/admin/home'
   },
   {
       title: 'UI',
-      key: '/ui',
+      key: '/admin/ui',
       children: [
           {
               title: '按钮',
-              key: 'admin/ui/buttons',
+              key: '/admin/ui/buttons',
           },
           {
               title: '弹框',
-              key:'admin/ui/modals',
+              key:'/admin/ui/modals',
           },
           {
               title: 'Loading',
-              key:'admin/ui/loadings',
+              key:'/admin/ui/loadings',
           },
           {
               title: '通知提醒',
-              key:'admin/ui/notification',
+              key:'/admin/ui/notification',
           },
           {
               title: '全局Message',
-              key:'admin/ui/messages',
+              key:'/admin/ui/messages',
           },
           {
               title: 'Tab页签',
-              key:'admin/ui/tabs',
+              key:'/admin/ui/tabs',
           },
           {
               title: '图片画廊',
-              key:'admin/ui/gallery',
+              key:'/admin/ui/gallery',
           },
           {
               title: '轮播图',
-              key: 'admin/ui/carousel',
+              key: '/admin/ui/carousel',
           }
       ]
   },
   {
       title: '表单',
-      key: '/form',
+      key: '/admin/form',
       children: [
           {
               title: '登录',
-              key: '/form/login',
+              key: '/admin/form/login',
           },
           {
               title: '注册',
-              key: '/form/reg',
+              key: '/admin/form/reg',
           }
       ]
   },
   {
       title: '表格',
-      key: '/table',
+      key: '/admin/table',
       children: [
           {
               title: '基础表格',
-              key: '/table/basic',
+              key: '/admin/table/basic',
           },
           {
               title: '高级表格',
-              key: '/table/high',
+              key: '/admin/table/high',
           }
       ]
   },
   {
       title: '富文本',
-      key: '/rich'
+      key: '/admin/rich'
   },
   {
       title: '城市管理',
-      key: '/city'
+      key: '/admin/city'
   },
   {
       title: '订单管理',

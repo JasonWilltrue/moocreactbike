@@ -12,7 +12,7 @@ export default class Axios {
        loading.style.display = 'block';
     }
     let baseUrl =
-      "https://www.easy-mock.com/mock/59b09f37e0dc6633419fb9eb/antdbike";
+      "https://easy-mock.com/mock/5b7291ba17ef106fc40446f1/antdbike";
     return new Promise((resolve, rejects) => {
       axios({
         url: options.url,

@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from "react";
-import { Card, Table, Modal, Button, message } from "antd";
+import { Card, Table, Modal, Button, message,Badge } from "antd";
 import axios from "./../../axios";
 import Utils from "../../utils/utils";
+
 
 export default class HighTable extends Component {
   state = {
@@ -192,6 +193,17 @@ export default class HighTable extends Component {
         sortOrder:sorter.order
      })
 
+  }
+  handleItemDelete = (item)=>{
+
+    Modal.confirm({
+          title:'提示',
+          content:`你确定要删除${item.id}，${item.name}此条数据吗？`,
+          onOk :()=>{
+            message.info('删除成功');
+          }
+
+      })
   }
   render() {
     //表格头
@@ -517,11 +529,11 @@ export default class HighTable extends Component {
           width: 180,
           render(state) {
             let config = {
-              "1": "咸鱼一条",
-              "2": "风华浪子",
-              "3": "北大才子",
-              "4": "百度EF",
-              "5": "老板"
+              "1": <Badge status="success" text="咸鱼一条" />,
+              "2":  <Badge status="processing" text="风华浪子" />,
+              "3": <Badge status="warning" text="北大才子" />,
+              "4": <Badge status="default" text="百度EF" />,
+              "5": <Badge status="error" text="老板" />,
             };
             return config[state];
           }
@@ -531,7 +543,19 @@ export default class HighTable extends Component {
           key: "datetime",
           width: 100,
           dataIndex: "datetime"
-        }
+        },
+        {
+            title: "操作",
+            width: 120,
+            render:(text,item)=>{
+               return (
+                <Fragment>
+                    <Button size="small" type="primary" icon="edit">编辑</Button>
+                    <Button size="small"  type="danger" icon="delete" onClick={()=>{this.handleItemDelete(item)}}>删除</Button>
+                </Fragment>
+               )
+            }
+          }
       ];
     //定义一个数组 用于onchange切换使用
     const { selectedRowKeys } = this.state;
