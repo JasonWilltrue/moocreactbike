@@ -3,10 +3,12 @@ import { Card, Table, Modal, Button, message,Badge } from "antd";
 import axios from "./../../axios";
 import Utils from "../../utils/utils";
 import FilterForm from './filterForm';
+import OpenCity from './opencity';
 
 export default class City extends Component {
   state = {
      list: [],
+     isShowOpenCity:false,
   };
   //当前页
   params = {
@@ -49,8 +51,32 @@ export default class City extends Component {
         }
       });
   };
+  handleOpenCity=()=>{
+      this.setState({
+          isShowOpenCity:true
+      })
+  }
+  handleSubmit= ()=>{
+      //get新技能
+    let cityInfo = this.cityForm.props.form.getFieldsValue();
+    console.log('cityInfo  ',cityInfo);
+    axios.ajax({
+        url:"/city/open",
+        data:{
+            params:cityInfo
+        }
+    }).then(res =>{
+        console.log(res);
 
-
+        if(res.code === 0 ){
+            message.success('开通成功！')
+            this.setState({
+                isShowOpenCity:false
+            })
+            this.request();
+        }
+    })
+  }
 
   render() {
     const columns = [
@@ -126,7 +152,7 @@ export default class City extends Component {
              <FilterForm />
          </Card>
          <Card style={{marginTop:10}}>
-             <Button icon="plus" type="primary">开通城市</Button>
+             <Button icon="plus" type="primary" onClick={this.handleOpenCity}>开通城市</Button>
          </Card>
          <div className="content-warp">
          <Table
@@ -136,7 +162,20 @@ export default class City extends Component {
          pagination = {this.state.pagination}
          />
          </div>
-
+          <Modal
+           title="开通城市"
+           visible = {this.state.isShowOpenCity}
+            onCancel = {()=>{
+                this.setState({
+                    isShowOpenCity:false
+                })
+            }}
+            onOk = {this.handleSubmit}
+          >
+          <OpenCity wrappedComponentRef={(inst)=>{
+                 this.cityForm = inst
+          }}/>
+          </Modal>
       </Fragment>
     );
   }
