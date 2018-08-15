@@ -17,6 +17,7 @@ import FormRegister from "./pages/form/register";
 import Basic from "./pages/table/basictable";
 import High from "./pages/table/hightable";
 import City from "./pages/city";
+import Order from "./pages/order";
 
 /**
  * 使用HashRouter来引流
@@ -46,6 +47,7 @@ export default class IRouter extends Component {
                   <Route path="/admin/table/basic" component={Basic} />
                   <Route path="/admin/table/high" component={High} />
                   <Route path="/admin/city" component={City} />
+                  <Route path="/admin/order" component={Order} />
                   <Route component={NoMatch} />
 
                 </Switch>
