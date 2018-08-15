@@ -39,7 +39,7 @@ class FilterForm extends Component{
                 <FormItem label="订单状态">
                    {
                        getFieldDecorator('op_mode')(
-                           <Select placeholder="全部" style={{width:80}}>
+                           <Select placeholder="全部" style={{width:120}}>
                             <Option value="">全部</Option>
                             <Option value="0">进行中</Option>
                             <Option value="1">进行中（暂时）</Option>

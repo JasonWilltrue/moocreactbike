@@ -4,8 +4,12 @@ import axios from "./../../axios";
 import Utils from "../../utils/utils";
 import FilterForm from './filterForm';
 
+
 export default class Order extends Component {
-    state={}
+    state={
+      list:[],
+      pagination:null,
+    }
  //当前页
  params = {
   page: 1
@@ -17,16 +21,31 @@ export default class Order extends Component {
 
    request = ()=>{
     const _this = this;
-    // axios
-    //   .ajax({
-    //     url: "/open_city",
-    //     data: {
-    //       params: {
-    //         page: this.params.page
-    //       },
-    //       isShowLoading: true
-    //     }
-    //   })
+    axios
+      .ajax({
+        url: "/orderlist",
+        data: {
+          params: {
+            page: this.params.page
+          },
+          isShowLoading: true
+        }
+      }).then((res)=>{
+        if(res.code === 0)
+        {
+            console.log(res.result.item_list);
+            res.result.item_list.map((item,index)=>{
+                   item.key = index
+            })
+            this.setState({
+               list:res.result.item_list,
+               pagination:Utils.pagination(res,(current)=>{
+                    _this.params.page = current;
+                    _this.request()
+               })
+            })
+        }
+      })
    }
 
 
@@ -35,9 +54,9 @@ export default class Order extends Component {
     const columns = [
       {
         title: "订单编号",
-        key: "order_snd",
+        key: "order_sn",
         width: 80,
-        dataIndex: "order_snd"
+        dataIndex: "order_sn"
       },
       {
         title: "车辆编号",
@@ -64,6 +83,9 @@ export default class Order extends Component {
         key: "distance",
         width: 80,
         dataIndex: "distance",
+        render:(distance)=>{
+           return `${distance}公里`
+        }
 
       },
       {
@@ -72,12 +94,21 @@ export default class Order extends Component {
         width: 80,
         dataIndex: "total_time",
 
+
       },
       {
         title: "状态",
         key: "status",
         width: 80,
         dataIndex: "status",
+        render:(status)=>{
+          let config = {
+            "1":'进行中',
+            "2":'进行中(暂时)',
+            "3":'结束',
+          }
+          return config[status]
+        }
 
       },
       {
@@ -121,7 +152,7 @@ export default class Order extends Component {
              <Table
                bordered
                columns={columns}
-               dataSource = {this.state.dataSource}
+               dataSource = {this.state.list}
                pagination = {this.state.pagination}
              />
          </div>
