@@ -1,16 +1,19 @@
 import React, { Component, Fragment } from "react";
-import { Card, Button, Table,Modal } from "antd";
+import { Card, Button, Table,Modal, Form } from "antd";
 import axios from "./../../axios";
 import Utils from "../../utils/utils";
 import FilterForm from "./filterForm";
 
+
+const FormItem = Form.Item;
 export default class Order extends Component {
   state = {
     list: [],
     pagination: null,
     selectedRowKeys: null,
     selectedItem:[],
-    orderConfirmVisble:false
+    orderConfirmVisble:false,
+    orderInfo:{}
   };
   //当前页
   params = {
@@ -49,6 +52,27 @@ export default class Order extends Component {
         }
       });
   };
+
+  request_orderInfo = (id)=>{
+    axios
+      .ajax({
+        url: "/order/bike_info",
+        data: {
+          params: {
+            order_sn: id
+          },
+          isShowLoading: true
+        }
+      })
+      .then(res => {
+        if (res.code === 0) {
+          console.log(res.result);
+          this.setState({
+            orderInfo: res.result
+          });
+        }
+      });
+  }
   onRowClick = (record, index) => {
     console.log(record, index);
     let selectKey = [index];
@@ -57,12 +81,38 @@ export default class Order extends Component {
       selectedItem: record
     });
   };
+
   handleConfirm =()=>{
-     this.setState({
-       orderConfirmVisble:true
-     })
+    if(this.state.selectedItem && this.state.selectedItem.order_sn)
+    {
+      this.setState({
+        orderConfirmVisble:true
+      })
+      this.request_orderInfo(this.state.selectedItem.order_sn);
+    }else{
+        Modal.error({
+           title:'错误提醒',
+           content:'请选中一个任务结束！'
+        })
+    }
+
   }
   handleOrderFinsh = ()=>{
+
+  }
+
+  handleOpenDetail = ()=>{
+
+      if(this.state.selectedItem && this.state.selectedItem.order_sn){
+        window.open(`#/common/order/detail/${this.state.selectedItem.bike_sn}`,'_blank')
+      //  window.location.href = `#/common/order/detail/${this.state.selectedItem.bike_sn}`;
+
+      }else{
+        Modal.error({
+          title:'错误提醒',
+          content:'请选中一个任务结束！'
+       })
+      }
 
   }
   render() {
@@ -71,6 +121,15 @@ export default class Order extends Component {
     const rowSelection = {
       type: "radio",
       selectedRowKeys
+    };
+    //定义山格兰
+    const formItemLayout = {
+      labelCol: {
+        span: 5
+      },
+      wrapperCol: {
+        span: 19
+      }
     };
     const columns = [
       {
@@ -157,7 +216,7 @@ export default class Order extends Component {
           <FilterForm />
         </Card>
         <Card style={{ marginTop: 10 }}>
-          <Button icon="profile" type="primary">
+          <Button icon="profile" type="primary" onClick={this.handleOpenDetail}>
             订单详情
           </Button>
           <Button icon="close-circle-o" type="primary" onClick={this.handleConfirm}>
@@ -191,6 +250,22 @@ export default class Order extends Component {
            }}
            onOk={this.handleOrderFinsh}
         >
+      <Form layout="horizontal">
+            <FormItem label="车辆编号" {...formItemLayout}>
+                {this.state.orderInfo.bike_sn}
+            </FormItem>
+            <FormItem label="剩余电量" {...formItemLayout}>
+            {this.state.orderInfo.battery}
+
+            </FormItem>
+            <FormItem label="行程开始时间" {...formItemLayout}>
+            {this.state.orderInfo.start_time}
+
+            </FormItem>
+            <FormItem label="当前位置" {...formItemLayout}>
+            {this.state.orderInfo.location}
+            </FormItem>
+        </Form>
         </Modal>
       </Fragment>
     );
