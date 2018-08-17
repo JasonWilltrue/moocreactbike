@@ -8,13 +8,13 @@ class Header extends React.Component {
     const type = this.props.menuType;
     return (
       <div className="header">
-        <Row className="header_top">
+        <Row className="header-top">
           {!type ? (
             ""
           ) : (
-            <Col span="6">
-              <img src="/assetc/logo-ant.svg" alt="" />
-              <span>详情页面后台</span>
+            <Col span="6" className="logo">
+              <img src="/assets/logo-ant.svg" alt="" />
+              <span>通过详情管理页面</span>
             </Col>
           )}
 

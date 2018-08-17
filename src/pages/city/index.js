@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Card, Table, Modal, Button, message,Badge } from "antd";
+import { Card, Table, Modal, Button, message } from "antd";
 import axios from "./../../axios";
 import Utils from "../../utils/utils";
 import FilterForm from './filterForm';

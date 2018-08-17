@@ -1,42 +1,61 @@
-@import './../../style/default.less';
-.header{
-    background-color: @colorM;
-    .header_top{
-        height: 60px;
-        line-height: 60px;
-        padding: 0 20px;
-        text-align: right;
-        a{
-            margin-left: 10px;
-        }
+@import "./../../style/default.less";
+.header {
+  background-color: @colorM;
+  .header_top {
+    height: 60px;
+    line-height: 60px;
+    padding: 0 20px;
+    text-align: right;
+    a {
+      margin-left: 10px;
     }
-    .breadcrumb{
-        height: 40px;
-        line-height: 40px;
-        padding: 0 20px;
-        border-top: 1px solid #f9c700;
-        .breadcrumb_title{
-          text-align: center;
-          font-size: @fontC;
-          &:after{
-              position: absolute;
-              content:'';
-              left:73px;
-              top:39px;
-              border-top: 9px solid #fff;
-              border-left: 12px solid transparent;
-              border-right: 12px solid transparent;
-              box-shadow: 2px 2px 2px #f9f9f9;
-              
-          }
-          
-        }
-        .weather{
-            text-align: right;
-            .date{
-                margin-right: 10px;
-            }
-        }
+  }
+  .breadcrumb {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+    border-top: 1px solid #f9c700;
+    .breadcrumb_title {
+      text-align: center;
+      font-size: @fontC;
+      &:after {
+        position: absolute;
+        content: "";
+        left: 73px;
+        top: 39px;
+        border-top: 9px solid #fff;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        box-shadow: 2px 2px 2px #f9f9f9;
+      }
     }
+    .weather {
+      text-align: right;
+      .date {
+        margin-right: 10px;
+      }
+    }
+  }
+}
 
+// common 页面简单头
+.simple-page {
+  .header-top {
+    background: #1890ff;
+    color: @colorM;
+    text-align: right;
+    .logo {
+      line-height: 60px;
+      font-size: 18px;
+      img {
+        height: 40px;
+        vertical-align: middle;
+      }
+    }
+  }
+  .ant-form,
+  .ant-col-12,
+  .weather {
+    display: none;
+  }
 }

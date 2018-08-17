@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from "react";
-import { Card, Button, Table,Modal, Form } from "antd";
+import { Card, Button, Table, Modal, Form } from "antd";
 import axios from "./../../axios";
 import Utils from "../../utils/utils";
 import FilterForm from "./filterForm";
-
 
 const FormItem = Form.Item;
 export default class Order extends Component {
@@ -11,9 +10,9 @@ export default class Order extends Component {
     list: [],
     pagination: null,
     selectedRowKeys: null,
-    selectedItem:[],
-    orderConfirmVisble:false,
-    orderInfo:{}
+    selectedItem: [],
+    orderConfirmVisble: false,
+    orderInfo: {}
   };
   //当前页
   params = {
@@ -53,7 +52,7 @@ export default class Order extends Component {
       });
   };
 
-  request_orderInfo = (id)=>{
+  request_orderInfo = id => {
     axios
       .ajax({
         url: "/order/bike_info",
@@ -72,7 +71,7 @@ export default class Order extends Component {
           });
         }
       });
-  }
+  };
   onRowClick = (record, index) => {
     console.log(record, index);
     let selectKey = [index];
@@ -82,39 +81,42 @@ export default class Order extends Component {
     });
   };
 
-  handleConfirm =()=>{
-    if(this.state.selectedItem && this.state.selectedItem.order_sn)
-    {
+  handleConfirm = () => {
+    if (this.state.selectedItem && this.state.selectedItem.order_sn) {
       this.setState({
-        orderConfirmVisble:true
-      })
+        orderConfirmVisble: true
+      });
       this.request_orderInfo(this.state.selectedItem.order_sn);
-    }else{
-        Modal.error({
-           title:'错误提醒',
-           content:'请选中一个任务结束！'
-        })
+    } else {
+      Modal.error({
+        title: "错误提醒",
+        content: "请选中一个任务结束！"
+      });
     }
+  };
+  /**
+   * 完成订单方法
+   */
+  handleOrderFinsh = () => {};
 
-  }
-  handleOrderFinsh = ()=>{
-
-  }
-
-  handleOpenDetail = ()=>{
-
-      if(this.state.selectedItem && this.state.selectedItem.order_sn){
-        window.open(`#/common/order/detail/${this.state.selectedItem.bike_sn}`,'_blank')
+  /**
+   * 打开订单详情方法
+   */
+  handleOpenDetail = () => {
+    if (this.state.selectedItem && this.state.selectedItem.order_sn) {
+      window.open(
+        `#/common/order/detail/${this.state.selectedItem.bike_sn}`,
+        "_blank"
+      );
       //  window.location.href = `#/common/order/detail/${this.state.selectedItem.bike_sn}`;
+    } else {
+      Modal.error({
+        title: "错误提醒",
+        content: "请选中一个任务结束！"
+      });
+    }
+  };
 
-      }else{
-        Modal.error({
-          title:'错误提醒',
-          content:'请选中一个任务结束！'
-       })
-      }
-
-  }
   render() {
     //定义一个数组 用于onchange切换使用
     const { selectedRowKeys } = this.state;
@@ -219,7 +221,11 @@ export default class Order extends Component {
           <Button icon="profile" type="primary" onClick={this.handleOpenDetail}>
             订单详情
           </Button>
-          <Button icon="close-circle-o" type="primary" onClick={this.handleConfirm}>
+          <Button
+            icon="close-circle-o"
+            type="primary"
+            onClick={this.handleConfirm}
+          >
             取消订单
           </Button>
         </Card>
@@ -241,31 +247,29 @@ export default class Order extends Component {
           />
         </div>
         <Modal
-           title="取消订单"
-           visible = {this.state.orderConfirmVisble}
-           onCancel={()=>{
-             this.setState({
-                orderConfirmVisble:false
-             })
-           }}
-           onOk={this.handleOrderFinsh}
+          title="取消订单"
+          visible={this.state.orderConfirmVisble}
+          onCancel={() => {
+            this.setState({
+              orderConfirmVisble: false
+            });
+          }}
+          onOk={this.handleOrderFinsh}
         >
-      <Form layout="horizontal">
+          <Form layout="horizontal">
             <FormItem label="车辆编号" {...formItemLayout}>
-                {this.state.orderInfo.bike_sn}
+              {this.state.orderInfo.bike_sn}
             </FormItem>
             <FormItem label="剩余电量" {...formItemLayout}>
-            {this.state.orderInfo.battery}
-
+              {this.state.orderInfo.battery}
             </FormItem>
             <FormItem label="行程开始时间" {...formItemLayout}>
-            {this.state.orderInfo.start_time}
-
+              {this.state.orderInfo.start_time}
             </FormItem>
             <FormItem label="当前位置" {...formItemLayout}>
-            {this.state.orderInfo.location}
+              {this.state.orderInfo.location}
             </FormItem>
-        </Form>
+          </Form>
         </Modal>
       </Fragment>
     );

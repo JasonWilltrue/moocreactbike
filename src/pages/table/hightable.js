@@ -101,11 +101,11 @@ export default class HighTable extends Component {
         datetime: "2018-08-11"
       }
     ];
-    dataSource.map((item, index) => {
-      item.key = index;
+    const newDateSource =  dataSource.map((item, index) => {
+          return item.key = index;
     });
     this.setState({
-      dataSource
+      dataSource:newDateSource
     });
     this.request();
   }

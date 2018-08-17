@@ -19,7 +19,7 @@ import High from "./pages/table/hightable";
 import City from "./pages/city";
 import Order from "./pages/order";
 import Common from "./common";
-import Detail from "./pages/order/orderInfo";
+import Detail from "./pages/order/detail";
 /**
  * 使用HashRouter来引流
  */
