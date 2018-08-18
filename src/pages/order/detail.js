@@ -17,6 +17,45 @@ export default class Detail extends Component {
     }
   }
 
+  renderMap = (res) => {
+    // ☆☆☆单独BMap 是会undefined的 因为是单页面应用只能根据import导入查找到对象，所有要找挂载到window下的BMap☆☆☆
+    this.map = new window.BMap.Map("orderDetailMap", { enableMapClick: false });
+    this.map.centerAndZoom('北京', 11);
+    this.addMapControl();
+    this.drawBikeRoute(res.position_list);
+
+  };
+  //添加地图控件
+  addMapControl = () => {
+    let map = this.map;
+    map.addControl(new window.BMap.NavigationControl({anchor:window.BMAP_ANCHOR_TOP_LEFT}));
+    map.addControl(new window.BMap.ScaleControl({anchor:window.BMAP_ANCHOR_TOP_LEFT}));
+  };
+  // 绘制行驶路线图
+  drawBikeRoute = (positionList)=>{
+    let map = this.map;
+    let startPoint = '';
+    let endPoint = '';
+    if(positionList.length>0)
+    {
+
+       let arr = positionList[0];
+       startPoint = new window.BMap.Point(arr.lon,arr.lat);
+       var startIcon = new window.BMap.Icon("./assets/start_point.png", new window.BMap.Size(36,42), {
+        // 指定定位位置。
+        // 当标注显示在地图上时，其所指向的地理位置距离图标左上
+        // 角各偏移10像素和25像素。您可以看到在本例中该位置即是
+        // 图标中央下端的尖角位置。
+        imageSize:new window.BMap.Size(36,42),
+
+        anchor:new window.BMap.Size(36,42)
+        });
+      let startMarker = new window.BMap.Marker(startPoint,{icon:startIcon});
+    }
+
+
+  }
+
   getDetailInfo = orderId => {
     axios
       .ajax({
@@ -33,6 +72,7 @@ export default class Detail extends Component {
           this.setState({
             detailInfo: res.result
           });
+          this.renderMap(res.result);
         }
       });
   };
@@ -40,8 +80,8 @@ export default class Detail extends Component {
   render() {
     const info = this.state.detailInfo || {};
     return (
-      <Fragment>
-        <div id="orderDetailMap">地图显示区</div>
+      <div className="detail-Wapper">
+        <div id="orderDetailMap" className="order-map"></div>
         <div className="detail-items">
           <div className="item-title">基础信息</div>
           <ul className="detail-form">
@@ -88,7 +128,7 @@ export default class Detail extends Component {
             </li>
           </ul>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

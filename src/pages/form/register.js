@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Card, Form, Input, Button, message, Icon, Checkbox } from "antd";
+import { Card, Form, Input, Icon } from "antd";
 const FormItem = Form.Item;
 class FormRegister extends Component {
   render() {
