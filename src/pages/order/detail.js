@@ -38,9 +38,12 @@ export default class Detail extends Component {
     let endPoint = '';
     if(positionList.length>0)
     {
+      //  当前初始第一个数值对
+       let first = positionList[0];
+       let last =  positionList[positionList.length -1];
+       startPoint = new window.BMap.Point(first.lon,first.lat);
+       console.log(first.lon,first.lat);
 
-       let arr = positionList[0];
-       startPoint = new window.BMap.Point(arr.lon,arr.lat);
        var startIcon = new window.BMap.Icon("./assets/start_point.png", new window.BMap.Size(36,42), {
         // 指定定位位置。
         // 当标注显示在地图上时，其所指向的地理位置距离图标左上
@@ -51,6 +54,35 @@ export default class Detail extends Component {
         anchor:new window.BMap.Size(36,42)
         });
       let startMarker = new window.BMap.Marker(startPoint,{icon:startIcon});
+      this.map.addOverlay(startMarker);
+
+      //绘制终点坐标
+      endPoint = new window.BMap.Point(last.lon,last.lat);
+      console.log(last.lon,last.lat);
+      var endIcon = new window.BMap.Icon("./assets/end_point.png", new window.BMap.Size(36,42), {
+        imageSize:new window.BMap.Size(36,42),
+        anchor:new window.BMap.Size(36,42)
+        });
+      let endMarker = new window.BMap.Marker(endPoint,{icon:endIcon});
+      this.map.addOverlay(endMarker);
+
+      // 第四步连接路线图
+      let trackPoint = [];
+      for (let i = 0; i < positionList.length; i++) {
+          let point = positionList[i];
+          trackPoint.push(new window.BMap.Point(point.lon,point.lat));
+
+      }
+     console.log(trackPoint);
+
+    let polyline=  new window.BMap.Polyline(trackPoint,{
+         strokeColor:'#FF0000',
+         strokeWeight:4,
+         strokeOpacity:1
+      })
+
+      this.map.addOverlay(polyline);
+
     }
 
 
