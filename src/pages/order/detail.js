@@ -6,7 +6,7 @@ export default class Detail extends Component {
   state = {
     detailInfo: {}
   };
-
+  
   componentDidMount() {
     //获取网页链接动态编号
     let orderId = this.props.match.params.orderId;
