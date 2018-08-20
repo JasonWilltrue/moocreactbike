@@ -14,8 +14,7 @@ export default class Order extends Component {
     selectedRowKeys: null,
     selectedItem: [],
     orderConfirmVisble: false,
-    orderInfo: {},
-    selectedIds:[],
+    orderInfo: {}
   };
   //当前页
   params = {
@@ -56,7 +55,32 @@ export default class Order extends Component {
 
     axios.requestList(this,'/orderlist',this.params,true)
 
-
+    // =======未封装前的写法===========
+    // const _this = this;
+    // axios
+    //   .ajax({
+    //     url: "/orderlist",
+    //     data: {
+    //       params: this.params,
+    //       isShowLoading: true
+    //     }
+    //   })
+    //   .then(res => {
+    //     if (res.code === 0) {
+    //       console.log(res.result.item_list);
+    //       res.result.item_list.map((item, index) => {
+    //         item.key = index;
+    //       });
+    //       this.setState({
+    //         list: res.result.item_list,
+    //         pagination: Utils.pagination(res, current => {
+    //           _this.params.page = current;
+    //           _this.request();
+    //         })
+    //       });
+    //     }
+    //   });
+    // =======未封装前的写法===========
   };
 
   request_orderInfo = id => {
@@ -79,7 +103,14 @@ export default class Order extends Component {
         }
       });
   };
-
+  // onRowClick = (record, index) => {
+  //   console.log(record, index);
+  //   let selectKey = [index];
+  //   this.setState({
+  //     selectedRowKeys: selectKey,
+  //     selectedItem: record
+  //   });
+  // };
 
   handleConfirm = () => {
     if (this.state.selectedItem && this.state.selectedItem.order_sn) {
@@ -125,7 +156,12 @@ export default class Order extends Component {
       this.request();
   }
   render() {
-
+    //定义一个数组 用于onchange切换使用
+    // const { selectedRowKeys } = this.state;
+    // const rowSelection = {
+    //   type: "radio",
+    //   selectedRowKeys
+    // };
     //定义山格兰
     const formItemLayout = {
       labelCol: {
@@ -240,16 +276,26 @@ export default class Order extends Component {
           columns={columns}
           dataSource={this.state.list}
           pagination={this.state.pagination}
-
           selectedRowKeys={this.state.selectedRowKeys}
-          selectedItem={this.state.selectedItem}
-          selectedIds={this.state.selectedIds}
-
-          rowSelection={"checkbox"} //单选多选  类型配置
-
+          rowSelection={"radio"} //单选多选  类型配置
           updateSelectedItem={Utils.updateSelectedItem.bind(this)}  //因为方法中有要更新的this.setstate 必须绑定this指向
-         />
 
+         />
+          {/* <Table
+            bordered
+            rowSelection={rowSelection} //单选多选  类型配置
+            columns={columns}
+            dataSource={this.state.list}
+            pagination={this.state.pagination}
+            onRow={(record, index) => {
+              return {
+                onClick: () => {
+                  this.onRowClick(record, index);
+                }, //点击行
+                onMouseEnter: () => {} //鼠标移入行
+              };
+            }}
+          /> */}
         </div>
         <Modal
           title="取消订单"

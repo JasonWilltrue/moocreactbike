@@ -32,13 +32,24 @@ export default {
          })
          return options;
      },
-     updateSelectedItem(selectKey,record){
-        this.setState({
-            selectedRowKeys: selectKey,
-            selectedItem: record
-          });
-          console.log('jinlaile ');
-          
+
+
+     updateSelectedItem(selectKey,record,selectedIds){
+        if(selectedIds){
+            this.setState({
+                selectedRowKeys: selectKey,
+                selectedItem: record,
+                selectedIds:selectedIds,
+              });
+        }else{
+            this.setState({
+                selectedRowKeys: selectKey,
+                selectedItem: record
+              });
+        }
+
+          console.log(record);
+
      }
 
 }
