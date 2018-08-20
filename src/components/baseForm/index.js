@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Select, Form,Input,Checkbox ,Button} from 'and';
+import { Select, Form,Input,Checkbox ,Button,DatePicker} from 'antd';
 import Utils from '../../utils/utils';
 
 const FormItem = Form.Item;
@@ -9,7 +9,12 @@ class BaseForm extends Component {
   handleFilterSubmit= ()=>{
     let filterInfo = this.props.form.getFieldsValue();
     this.props.filterSubmit(filterInfo);
-  }
+	}
+	
+	//重置
+	reset = ()=>{
+		  this.props.form.resetFields();
+	}
 
 	initFormList = () => {
 		const { getFieldDecorator } = this.props.form;
@@ -21,14 +26,29 @@ class BaseForm extends Component {
 			formList.map((item, i) => {
 				let label = item.label;
 				let field = item.field;
-				let initalValue = item.initalValue || '';
+				let initialValue = item.initialValue || '';
 				let placeholder = item.placeholder;
-				let width = item.widht;
+				let width = item.width;
+				if(item.type === "时间查询"){
+					 const start_time = (<FormItem  label={label} key={field}>
+					 {getFieldDecorator("start_time")(
+						 <DatePicker showTime placeholder="开始时间" format="YYYY-MM-DD HH:mm:ss" />
+					 )}
+				 </FormItem>);
+         formItemList.push(start_time)
+				  const end_time = (<FormItem label="~"  colon={false}  key={field+1}>
+					{getFieldDecorator("end_time")(
+						<DatePicker showTime placeholder="结束时间" format="YYYY-MM-DD HH:mm:ss" />
+					)}
+				</FormItem>)
+				formItemList.push(end_time)
+				}
+
 				if (item.type === 'INPUT') {
 					const INPUT = (
 						<FormItem label={label} key={field}>
 							{getFieldDecorator([field], {
-								initalValue: initalValue,
+								initialValue: initialValue,
 							})(<Input type="text" placeholder={placeholder} />)}
 						</FormItem>
 					);
@@ -37,9 +57,9 @@ class BaseForm extends Component {
 					const SELECT = (
 						<FormItem label={label} key={field}>
 							{getFieldDecorator([field], {
-								initalValue: initalValue,
+								initialValue: initialValue,
 							})(
-								<Select placeholder={placeholder} style={{ width: { width } }}>
+								<Select placeholder={placeholder} style={{width:width}}>
 									{Utils.getOptionList(item.list)}
 								</Select>
 							)}
@@ -51,7 +71,7 @@ class BaseForm extends Component {
 						<FormItem label={label} key={field}>
 							{getFieldDecorator([field], {
 								valuePropName: 'checkbox',
-								initalValue: initalValue, //true or false
+								initialValue: initialValue, //true or false
 							})(<Checkbox>{label}</Checkbox>)}
 						</FormItem>
 					);
@@ -65,7 +85,7 @@ class BaseForm extends Component {
 	render() {
 		return (
 			<div>
-				<Form>
+				<Form layout="inline">
            {this.initFormList()}
            <FormItem>
           <Button

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Card, Button, Table, Modal, Form } from "antd";
 import axios from "./../../axios";
 import Utils from "../../utils/utils";
-import FilterForm from "./filterForm";
+// import FilterForm from "./filterForm";
 import BaseForm from '../../components/baseForm'
 
 const FormItem = Form.Item;
@@ -26,12 +26,13 @@ export default class Order extends Component {
     label:'城市',
     field:"city_id",
     placeholder:'全部',
-    initialValue:'0',
+    initialValue:'1',
     list:[{"id":"0","name":"全部"},{"id":"1","name":"北京"},{"id":"2","name":"上海"},{"id":"3","name":"杭州"},{"id":"4","name":"广州"}],
     width: 100,
   },
   {
     type:'时间查询',
+    label:'时间查询',
     field:"time",
   },
   {
@@ -39,7 +40,7 @@ export default class Order extends Component {
     label:'订单状态',
     field:"status",
     placeholder:'全部',
-    initialValue:'-1',
+    initialValue:'0',
     list:[{"id":"-1","name":"全部"},{"id":"0","name":"进行中"},{"id":"1","name":"进行中（暂时）"},{"id":"2","name":"结束行程"}],
     width: 120,
   },
@@ -55,9 +56,7 @@ export default class Order extends Component {
       .ajax({
         url: "/orderlist",
         data: {
-          params: {
-            page: this.params.page
-          },
+          params: this.params,
           isShowLoading: true
         }
       })
@@ -146,6 +145,8 @@ export default class Order extends Component {
   //筛选查询方法调用
   handleFilterSubmit=(parmas)=>{
       this.params = parmas;
+      console.log(this.params);
+      
       this.request();
   }
   render() {
@@ -249,8 +250,8 @@ export default class Order extends Component {
     return (
       <Fragment>
         <Card>
-          {/* <BaseForm formList = {this.formList} filterSubmit={this.handleFilterSubmit} /> */}
-          <FilterForm  />
+          <BaseForm formList = {this.formList} filterSubmit={this.handleFilterSubmit} />
+          {/* <FilterForm  /> */}
         </Card>
         <Card style={{ marginTop: 10 }}>
           <Button icon="profile" type="primary" onClick={this.handleOpenDetail}>
