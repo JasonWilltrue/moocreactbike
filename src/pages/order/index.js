@@ -4,6 +4,7 @@ import axios from "./../../axios";
 import Utils from "../../utils/utils";
 // import FilterForm from "./filterForm";
 import BaseForm from '../../components/baseForm'
+import CTable from '../../components/cTable'
 
 const FormItem = Form.Item;
 export default class Order extends Component {
@@ -51,30 +52,35 @@ export default class Order extends Component {
   }
 
   request = () => {
-    const _this = this;
-    axios
-      .ajax({
-        url: "/orderlist",
-        data: {
-          params: this.params,
-          isShowLoading: true
-        }
-      })
-      .then(res => {
-        if (res.code === 0) {
-          console.log(res.result.item_list);
-          res.result.item_list.map((item, index) => {
-            item.key = index;
-          });
-          this.setState({
-            list: res.result.item_list,
-            pagination: Utils.pagination(res, current => {
-              _this.params.page = current;
-              _this.request();
-            })
-          });
-        }
-      });
+    
+    axios.requestList(this,'/orderlist',this.params,true)
+
+    // =======未封装前的写法===========
+    // const _this = this;
+    // axios
+    //   .ajax({
+    //     url: "/orderlist",
+    //     data: {
+    //       params: this.params,
+    //       isShowLoading: true
+    //     }
+    //   })
+    //   .then(res => {
+    //     if (res.code === 0) {
+    //       console.log(res.result.item_list);
+    //       res.result.item_list.map((item, index) => {
+    //         item.key = index;
+    //       });
+    //       this.setState({
+    //         list: res.result.item_list,
+    //         pagination: Utils.pagination(res, current => {
+    //           _this.params.page = current;
+    //           _this.request();
+    //         })
+    //       });
+    //     }
+    //   });
+    // =======未封装前的写法===========
   };
 
   request_orderInfo = id => {
@@ -266,7 +272,16 @@ export default class Order extends Component {
           </Button>
         </Card>
         <div className="content-warp">
-          <Table
+         <CTable 
+          columns={columns}
+          dataSource={this.state.list}
+          pagination={this.state.pagination}
+          selectedRowKeys={this.state.selectedRowKeys}
+          rowSelection={"radio"} //单选多选  类型配置
+          updateSelectedItem={Utils.updateSelectedItem.bind(this)}  //因为方法中有要更新的this.setstate 必须绑定this指向
+         
+         />
+          {/* <Table
             bordered
             rowSelection={rowSelection} //单选多选  类型配置
             columns={columns}
@@ -280,7 +295,7 @@ export default class Order extends Component {
                 onMouseEnter: () => {} //鼠标移入行
               };
             }}
-          />
+          /> */}
         </div>
         <Modal
           title="取消订单"
