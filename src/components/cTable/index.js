@@ -6,15 +6,13 @@ export default class CTable extends Component {
   onRowClick = (record, index) => {
     let rowSelection = this.props.rowSelection;
     if (rowSelection === "checkbox") {
-      let selectedRowKeys = this.props.selectedRowKeys;
+      let selectedRowKeys = this.props.selectedRowKeys || [];
       let selectedItem = this.props.selectedItem;   //必须是个数组
       let selectedIds = this.props.selectedIds;
       if(selectedIds){
         const i = selectedIds.indexOf(record.id);
         if( i  == -1)
         {
-          console.log(record);
-
           selectedIds.push(record.id);
           selectedRowKeys.push(index);
           selectedItem.push(record);

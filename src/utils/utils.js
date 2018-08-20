@@ -48,7 +48,7 @@ export default {
               });
         }
 
-          console.log(record);
+          console.log(record,selectedIds);
 
      }
 
