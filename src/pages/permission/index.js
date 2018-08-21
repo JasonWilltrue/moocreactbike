@@ -3,7 +3,7 @@ import { Card, Button, Modal, message } from "antd";
 import axios from "./../../axios";
 import Utils from "../../utils/utils";
 import CreatePermission from "./createP";
-
+import PermEditForm from "./permEditForm";
 import CTable from "../../components/cTable";
 
 export default class PermissionUser extends Component {
@@ -13,7 +13,8 @@ export default class PermissionUser extends Component {
     selectedRowKeys: null,
     selectedItem: [],
     createVisble: false,
-    orderInfo: {},
+    isPermVisible: false,
+    detailInfo: {},
     selectedIds: []
   };
   //当前页
@@ -66,10 +67,28 @@ export default class PermissionUser extends Component {
   request = () => {
     axios.requestList(this, "/permission_list", this.params, true);
   };
-
+  // 创建权限
   handleOpenCreate = () => {
     this.setState({
       createVisble: true
+    });
+  };
+  // 权限设置
+  handleOpenEdit = () => {
+    let item = this.state.selectedItem;
+    console.log(item);
+
+    if (item.length === 0) {
+      Modal.error({
+        title: "提醒",
+        content: "请选中一个角色"
+      });
+      return;
+    }
+
+    this.setState({
+      isPermVisible: true,
+      detailInfo: item
     });
   };
 
@@ -97,6 +116,7 @@ export default class PermissionUser extends Component {
       });
   };
 
+  handleEditPermission = () => {};
 
   render() {
     //定义山格兰
@@ -191,6 +211,26 @@ export default class PermissionUser extends Component {
           <CreatePermission
             wrappedComponentRef={inst => {
               this.createInfo = inst;
+            }}
+          />
+        </Modal>
+        <Modal
+          title="设置权限"
+          visible={this.state.isPermVisible}
+          width={600}
+          onCancel={() => {
+            //重置功能
+            this.editInfo.props.form.resetFields();
+            this.setState({
+              isPermVisible: false
+            });
+          }}
+          onOk={this.handleEditPermission}
+        >
+          <PermEditForm
+            detailInfo={this.state.detailInfo}
+            wrappedComponentRef={inst => {
+              this.editInfo = inst;
             }}
           />
         </Modal>
