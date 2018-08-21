@@ -29,6 +29,7 @@ class BaseForm extends Component {
 				let initialValue = item.initialValue || '';
 				let placeholder = item.placeholder;
 				let width = item.width;
+				//封装各个类型模块
 				if(item.type === "时间查询"){
 					 const start_time = (<FormItem  label={label} key={field}>
 					 {getFieldDecorator("start_time")(
@@ -49,7 +50,7 @@ class BaseForm extends Component {
 						<FormItem label={label} key={field}>
 							{getFieldDecorator([field], {
 								initialValue: initialValue,
-							})(<Input type="text" placeholder={placeholder} />)}
+							})(<Input type="text" placeholder={placeholder} style={{width:width}} />)}
 						</FormItem>
 					);
 					formItemList.push(INPUT);
@@ -76,6 +77,13 @@ class BaseForm extends Component {
 						</FormItem>
 					);
 					formItemList.push(CHECKBOX);
+				}else if(item.type === 'DATEPICKER'){
+					const in_time = (<FormItem label={label} key={field}>
+					{getFieldDecorator([field])(
+						<DatePicker showTime placeholder={placeholder} format="YYYY-MM-DD" style={{width:width}} />
+					)}
+					</FormItem>)
+					formItemList.push(in_time)
 				}
 			});
     }
