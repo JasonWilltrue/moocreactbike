@@ -93,15 +93,15 @@ const menuList = [
   },
   {
       title: '员工管理',
-      key: '/user'
+      key: 'admin/user'
   },
   {
       title: '车辆地图',
-      key: '/bikeMap'
+      key: 'admin/bikeMap'
   },
   {
       title: '图标',
-      key: '/charts',
+      key: 'admin/charts',
       children: [
           {
               title: '柱形图',
@@ -119,7 +119,7 @@ const menuList = [
   },
   {
       title: '权限设置',
-      key: '/permission'
+      key: 'admin/permission'
   },
 ];
 export default menuList;

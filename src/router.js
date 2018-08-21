@@ -21,6 +21,8 @@ import Order from "./pages/order";
 import Common from "./common";
 import Detail from "./pages/order/detail";
 import User from "./pages/user";
+import Permission from "./pages/permission";
+
 
 /**
  * 使用HashRouter来引流
@@ -55,6 +57,7 @@ export default class IRouter extends Component {
                   <Route path="/admin/city" component={City} />
                   <Route path="/admin/order" component={Order} />
                   <Route path="/admin/user" component={User} />
+                  <Route path="/admin/permission" component={Permission} />
                   <Route component={NoMatch} />
                 </Switch>
               </Admin>
