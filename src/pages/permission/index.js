@@ -15,7 +15,8 @@ export default class PermissionUser extends Component {
     createVisble: false,
     isPermVisible: false,
     detailInfo: {},
-    selectedIds: []
+    selectedIds: [],
+    menuInfo:[],
   };
   //当前页
   params = {
@@ -88,10 +89,12 @@ export default class PermissionUser extends Component {
 
     this.setState({
       isPermVisible: true,
-      detailInfo: item
+      detailInfo: item,
+      menuInfo:item.menus
     });
   };
 
+  //创建角色按钮
   handleCreateFinsh = () => {
     let createInfo = this.createInfo.props.form.getFieldsValue();
     console.log("创建角色信息  ", createInfo);
@@ -116,7 +119,34 @@ export default class PermissionUser extends Component {
       });
   };
 
-  handleEditPermission = () => {};
+  //修改角色按钮
+  handleEditSubmit = () => {
+    let editInfo = this.editInfo.props.form.getFieldsValue();
+    console.log("修改角色信息  ", editInfo);
+    // 角色id
+    editInfo.role_id = this.state.selectedItem.id;
+    //角色权限区域
+    editInfo.menus = this.state.menuInfo;
+    axios
+    .ajax({
+      url: "/role/edit",
+      data: {
+        params: editInfo
+      }
+    })
+    .then(res => {
+      if (res.code === 0) {
+        message.success("角色修改成功!");
+        this.setState({
+          isPermVisible: false,
+          selectedRowKeys: null,
+          selectedItem: [],
+        });
+        this.editInfo.props.form.resetFields();
+        this.request();
+      }
+    });
+  };
 
   render() {
     //定义山格兰
@@ -138,7 +168,7 @@ export default class PermissionUser extends Component {
       {
         title: "角色名称",
         key: "role_name",
-        dataIndex: "role_name"
+        dataIndex: "role_name",
       },
       {
         title: "创建时间",
@@ -225,12 +255,18 @@ export default class PermissionUser extends Component {
               isPermVisible: false
             });
           }}
-          onOk={this.handleEditPermission}
+          onOk={this.handleEditSubmit}
         >
           <PermEditForm
             detailInfo={this.state.detailInfo}
+            menuInfo={this.state.menuInfo}
             wrappedComponentRef={inst => {
               this.editInfo = inst;
+            }}
+            patchMenuInfo={(checkedKeys)=>{
+              this.setState({
+                 menuInfo:checkedKeys
+              })
             }}
           />
         </Modal>

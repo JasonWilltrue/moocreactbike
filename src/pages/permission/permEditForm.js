@@ -8,6 +8,7 @@ const Option = Select.Option;
 const TreeNode = Tree.TreeNode;
 class PermEditForm extends Component {
 
+
   renderTreeNodes = data => {
 //一定要写 return 不然数据不能出来
     return data.map(item => {
@@ -24,10 +25,17 @@ class PermEditForm extends Component {
     });
   };
 
+  onCheck=(checkedKeys)=>{
+    console.log(checkedKeys);
+    this.props.patchMenuInfo(checkedKeys)
+
+  }
+
   render() {
     //栅格布局
     const { getFieldDecorator } = this.props.form;
     const detailInfo = this.props.detailInfo;
+    const menuInfo = this.props.menuInfo;
     const formItemLayout = {
       labelCol: {
         span: 5
@@ -39,7 +47,7 @@ class PermEditForm extends Component {
     return (
       <Form layout="horizontal">
         <FormItem label="角色名" {...formItemLayout}>
-          {getFieldDecorator("city_id", {})(
+          {getFieldDecorator("role_name", {})(
             <Input
               disabled
               placeholder={detailInfo.role_name}
@@ -60,6 +68,10 @@ class PermEditForm extends Component {
         <Tree
          checkable
          defaultExpandAll
+         onCheck={(checkedKeys)=>{
+             this.onCheck(checkedKeys)
+         }}
+         checkedKeys={menuInfo}
         >
           <TreeNode title="平台权限" key="platform_all">
             {this.renderTreeNodes(menuConfig)}
