@@ -35,7 +35,7 @@ class UserAuth extends Component {
         </FormItem>
         <Transfer
         dataSource = {this.props.mockData}
-
+         //TODO:明天继续
         >
 
         </Transfer>
