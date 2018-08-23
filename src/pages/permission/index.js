@@ -14,9 +14,13 @@ export default class PermissionUser extends Component {
     selectedItem: [],
     createVisble: false,
     isPermVisible: false,
+    isUserVisible:false,
     detailInfo: {},
     selectedIds: [],
-    menuInfo:[],
+    menuInfo: [],
+    //用户授权
+    mockData:[],
+    targetKeys:[],
   };
   //当前页
   params = {
@@ -90,7 +94,7 @@ export default class PermissionUser extends Component {
     this.setState({
       isPermVisible: true,
       detailInfo: item,
-      menuInfo:item.menus
+      menuInfo: item.menus
     });
   };
 
@@ -128,26 +132,80 @@ export default class PermissionUser extends Component {
     //角色权限区域
     editInfo.menus = this.state.menuInfo;
     axios
-    .ajax({
-      url: "/role/edit",
-      data: {
-        params: editInfo
-      }
-    })
-    .then(res => {
-      if (res.code === 0) {
-        message.success("角色修改成功!");
-        this.setState({
-          isPermVisible: false,
-          selectedRowKeys: null,
-          selectedItem: [],
-        });
-        this.editInfo.props.form.resetFields();
-        this.request();
-      }
-    });
+      .ajax({
+        url: "/role/edit",
+        data: {
+          params: editInfo
+        }
+      })
+      .then(res => {
+        if (res.code === 0) {
+          message.success("角色修改成功!");
+          this.setState({
+            isPermVisible: false,
+            selectedRowKeys: null,
+            selectedItem: []
+          });
+          this.editInfo.props.form.resetFields();
+          this.request();
+        }
+      });
   };
 
+  handleUseAuth = () => {
+    let item = this.state.selectedItem;
+    if (item.length === 0) {
+      Modal.error({
+        title: "提醒",
+        content: "请选中一个角色"
+      });
+      return;
+    }
+    this.getRoleUserList(item);
+  };
+  //获取角色ID列表
+  getRoleUserList = (item) => {
+    axios.ajax({
+      url: "role/user_list",
+      data: {
+        params: {
+          id: item.id
+        }
+      }
+    }).then(res=>{
+       if(res){
+         this.setState({
+          isUserVisible:true,
+          detailInfo:item,
+         })
+         this.getAuthUserlist(res.result);
+       }
+    })
+  };
+  //分配不同列表用户
+  getAuthUserlist=(userList)=>{
+      const mockData = [];
+      const targetKeys=[];
+      if(userList && userList.length >0){
+        for (let i = 0; i < userList.length; i++) {
+          const e = userList[i];
+          const data={
+              key:e.user_id,
+              title:e.user_name,
+              status:e.status,
+          }
+          if(e.status == 1){
+             targetKeys.push(data);
+          }else{
+            mockData.push(data);
+          }
+          this.setState({
+            mockData,targetKeys
+          })
+
+        }
+      }
+  }
   render() {
     //定义山格兰
     const formItemLayout = {
@@ -168,7 +226,7 @@ export default class PermissionUser extends Component {
       {
         title: "角色名称",
         key: "role_name",
-        dataIndex: "role_name",
+        dataIndex: "role_name"
       },
       {
         title: "创建时间",
@@ -210,7 +268,7 @@ export default class PermissionUser extends Component {
           <Button
             icon="close-circle-o"
             type="primary"
-            onClick={this.handleConfirm}
+            onClick={this.handleUseAuth}
           >
             用户授权
           </Button>
@@ -263,10 +321,36 @@ export default class PermissionUser extends Component {
             wrappedComponentRef={inst => {
               this.editInfo = inst;
             }}
-            patchMenuInfo={(checkedKeys)=>{
+            patchMenuInfo={checkedKeys => {
               this.setState({
-                 menuInfo:checkedKeys
-              })
+                menuInfo: checkedKeys
+              });
+            }}
+          />
+        </Modal>
+        <Modal
+          title="用户授权"
+          visible={this.state.isUserVisible}
+          width={600}
+          onCancel={() => {
+            //重置功能
+            this.editInfo.props.form.resetFields();
+            this.setState({
+              isUserVisible: false
+            });
+          }}
+          onOk={this.handleUserAuthSubmit}
+        >
+          <PermEditForm
+            detailInfo={this.state.detailInfo}
+            menuInfo={this.state.menuInfo}
+            wrappedComponentRef={inst => {
+              this.editInfo = inst;
+            }}
+            patchMenuInfo={checkedKeys => {
+              this.setState({
+                menuInfo: checkedKeys
+              });
             }}
           />
         </Modal>
