@@ -8,6 +8,9 @@ const FormItem = Form.Item;
 
 class UserAuth extends Component {
 
+  filterOption = (inputValue, option) => {
+    return option.title.indexOf(inputValue) > -1;
+  }
 
   render() {
     //栅格布局
@@ -22,6 +25,9 @@ class UserAuth extends Component {
         span: 19
       }
     };
+    console.log('mockData：',this.props.mockData);
+    console.log('targetKeys',this.props.targetKeys);
+
     return (
       <Form layout="horizontal">
         <FormItem label="角色名" {...formItemLayout}>
@@ -35,7 +41,14 @@ class UserAuth extends Component {
         </FormItem>
         <Transfer
         dataSource = {this.props.mockData}
-         //TODO:明天继续
+
+         titles={['待选用户','已选用户']}
+         showSearch
+         searchPlaceholder='输入用户名'
+         filterOption={this.filterOption}
+         targetKeys={this.props.targetKeys}
+        //  onChange={this.handleChange}
+         render={item => item.title}
         >
 
         </Transfer>

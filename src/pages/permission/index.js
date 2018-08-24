@@ -4,6 +4,7 @@ import axios from "./../../axios";
 import Utils from "../../utils/utils";
 import CreatePermission from "./createP";
 import PermEditForm from "./permEditForm";
+import UserAuth from './userAuth';
 import CTable from "../../components/cTable";
 
 export default class PermissionUser extends Component {
@@ -161,23 +162,24 @@ export default class PermissionUser extends Component {
       });
       return;
     }
+    this.setState({
+      isUserVisible:true,
+      detailInfo:item,
+     })
     this.getRoleUserList(item);
   };
   //获取角色ID列表
-  getRoleUserList = (item) => {
+  getRoleUserList = (id) => {
     axios.ajax({
       url: "role/user_list",
       data: {
         params: {
-          id: item.id
+          id:id
         }
       }
     }).then(res=>{
        if(res){
-         this.setState({
-          isUserVisible:true,
-          detailInfo:item,
-         })
+
          this.getAuthUserlist(res.result);
        }
     })
@@ -334,18 +336,20 @@ export default class PermissionUser extends Component {
           width={600}
           onCancel={() => {
             //重置功能
-            this.editInfo.props.form.resetFields();
+            this.userAuthInfo.props.form.resetFields();
             this.setState({
               isUserVisible: false
             });
           }}
           onOk={this.handleUserAuthSubmit}
         >
-          <PermEditForm
+          <UserAuth
             detailInfo={this.state.detailInfo}
             menuInfo={this.state.menuInfo}
+            mockData={this.state.mockData}
+            targetKeys={this.state.targetKeys}
             wrappedComponentRef={inst => {
-              this.editInfo = inst;
+              this.userAuthInfo = inst;
             }}
             patchMenuInfo={checkedKeys => {
               this.setState({
