@@ -4,7 +4,7 @@ import axios from "./../../axios";
 import Utils from "../../utils/utils";
 import CreatePermission from "./createP";
 import PermEditForm from "./permEditForm";
-import UserAuth from './userAuth';
+import UserAuth from "./userAuth";
 import CTable from "../../components/cTable";
 
 export default class PermissionUser extends Component {
@@ -15,13 +15,13 @@ export default class PermissionUser extends Component {
     selectedItem: [],
     createVisble: false,
     isPermVisible: false,
-    isUserVisible:false,
+    isUserVisible: false,
     detailInfo: {},
     selectedIds: [],
     menuInfo: [],
     //用户授权
-    mockData:[],
-    targetKeys:[],
+    mockData: [],
+    targetKeys: []
   };
   //当前页
   params = {
@@ -163,50 +163,73 @@ export default class PermissionUser extends Component {
       return;
     }
     this.setState({
-      isUserVisible:true,
-      detailInfo:item,
-     })
+      isUserVisible: true,
+      detailInfo: item
+    });
     this.getRoleUserList(item);
   };
   //获取角色ID列表
-  getRoleUserList = (id) => {
-    axios.ajax({
-      url: "role/user_list",
-      data: {
-        params: {
-          id:id
+  getRoleUserList = id => {
+    axios
+      .ajax({
+        url: "role/user_list",
+        data: {
+          params: {
+            id: id
+          }
         }
+      })
+      .then(res => {
+        if (res) {
+          this.getAuthUserlist(res.result);
+        }
+      });
+  };
+
+  //分配不同列表用户
+  getAuthUserlist = userList => {
+    const mockData = [];
+    const targetKeys = [];
+    if (userList && userList.length > 0) {
+      for (let i = 0; i < userList.length; i++) {
+        const e = userList[i];
+        const data = {
+          key: e.user_id,
+          title: e.user_name,
+          status: e.status
+        };
+        if (e.status == 1) {
+          targetKeys.push(data.key);
+        }
+        mockData.push(data);
+      }
+      this.setState({
+        mockData,
+        targetKeys
+      });
+    }
+  };
+  // 用户授权提交
+  handleUserAuthSubmit=()=>{
+    let data ={}
+    data.user_ids = this.state.targetKeys;
+    console.log('tarkes:'+data.user_ids);
+
+    data.role_id = this.state.selectedItem.id;
+    axios.ajax({
+      url:'/city/open',
+      data:{
+         params:{...data}
       }
     }).then(res=>{
-       if(res){
-
-         this.getAuthUserlist(res.result);
-       }
-    })
-  };
-  //分配不同列表用户
-  getAuthUserlist=(userList)=>{
-      const mockData = [];
-      const targetKeys=[];
-      if(userList && userList.length >0){
-        for (let i = 0; i < userList.length; i++) {
-          const e = userList[i];
-          const data={
-              key:e.user_id,
-              title:e.user_name,
-              status:e.status,
-          }
-          if(e.status == 1){
-             targetKeys.push(data);
-          }else{
-            mockData.push(data);
-          }
-          this.setState({
-            mockData,targetKeys
-          })
-
-        }
+      if(res){
+        this.setState({
+          isUserVisible: false
+        });
+        message.success('权限修改成功！')
+        this.request();
       }
+    })
   }
   render() {
     //定义山格兰
@@ -355,6 +378,11 @@ export default class PermissionUser extends Component {
               this.setState({
                 menuInfo: checkedKeys
               });
+            }}
+            patchUserInfo={(targetKeys)=>{
+              this.setState({
+                targetKeys
+              })
             }}
           />
         </Modal>
