@@ -23,6 +23,7 @@ import Common from "./common";
 import Detail from "./pages/order/detail";
 import User from "./pages/user";
 import Permission from "./pages/permission";
+import Bar from "./pages/echarts/bar";
 
 
 /**
@@ -69,6 +70,8 @@ export default class IRouter extends Component {
                   <Route path="/order" component={Order} />
                   <Route path="/user" component={User} />
                   <Route path="/permission" component={Permission} />
+                  <Route path="/charts/bar" component={Bar} />
+
                   <Redirect to="/home" />
                   <Route component={NoMatch} />
                 </Switch>
