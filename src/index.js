@@ -13,7 +13,7 @@ import ReactDOM from 'react-dom';
  //引入路由文件
 import Admin from './router'
 
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(<Admin />, document.getElementById('root'));
-registerServiceWorker();
+// registerServiceWorker();
