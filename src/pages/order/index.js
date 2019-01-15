@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Card, Button, Table, Modal, Form } from 'antd';
+import { Card, Button, Modal, Form } from 'antd';
 import axios from './../../axios';
 import Utils from '../../utils/utils';
 // import FilterForm from "./filterForm";
@@ -9,13 +9,13 @@ import CTable from '../../components/cTable';
 const FormItem = Form.Item;
 export default class Order extends Component {
 	state = {
-		list: [],
-		pagination: null,
-		selectedRowKeys: null,
-		selectedItem: [],
+		list              : [],
+		pagination        : null,
+		selectedRowKeys   : null,
+		selectedItem      : [],
 		orderConfirmVisble: false,
-		orderInfo: {},
-		selectedIds: [],
+		orderInfo         : {},
+		selectedIds       : [],
 	};
 	//当前页
 	params = {
@@ -25,12 +25,12 @@ export default class Order extends Component {
 	//组件化封装表单
 	formList = [
 		{
-			type: 'SELECT',
-			label: '城市',
-			field: 'city_id',
-			placeholder: '全部',
+			type        : 'SELECT',
+			label       : '城市',
+			field       : 'city_id',
+			placeholder : '全部',
 			initialValue: '1',
-			list: [
+			list        : [
 				{ id: '0', name: '全部' },
 				{ id: '1', name: '北京' },
 				{ id: '2', name: '上海' },
@@ -40,17 +40,17 @@ export default class Order extends Component {
 			width: 100,
 		},
 		{
-			type: '时间查询',
+			type : '时间查询',
 			label: '时间查询',
 			field: 'time',
 		},
 		{
-			type: 'SELECT',
-			label: '订单状态',
-			field: 'status',
-			placeholder: '全部',
+			type        : 'SELECT',
+			label       : '订单状态',
+			field       : 'status',
+			placeholder : '全部',
 			initialValue: '0',
-			list: [
+			list        : [
 				{ id: '-1', name: '全部' },
 				{ id: '0', name: '进行中' },
 				{ id: '1', name: '进行中（暂时）' },
@@ -71,7 +71,7 @@ export default class Order extends Component {
 	request_orderInfo = id => {
 		axios
 			.ajax({
-				url: '/order/bike_info',
+				url : '/order/bike_info',
 				data: {
 					params: {
 						order_sn: id,
@@ -97,7 +97,7 @@ export default class Order extends Component {
 			this.request_orderInfo(this.state.selectedItem.order_sn);
 		} else {
 			Modal.error({
-				title: '错误提醒',
+				title  : '错误提醒',
 				content: '请选中一个任务结束！',
 			});
 		}
@@ -105,7 +105,7 @@ export default class Order extends Component {
 	/**
 	 * 完成订单方法
 	 */
-	handleOrderFinsh = () => {};
+	handleOrderFinsh = () => { };
 
 	/**
 	 * 打开订单详情方法
@@ -116,7 +116,7 @@ export default class Order extends Component {
 			//  window.location.href = `#/common/order/detail/${this.state.selectedItem.bike_sn}`;
 		} else {
 			Modal.error({
-				title: '错误提醒',
+				title  : '错误提醒',
 				content: '请选中一个任务结束！',
 			});
 		}
@@ -142,50 +142,50 @@ export default class Order extends Component {
 		// 表头数据
 		const columns = [
 			{
-				title: '订单编号',
-				key: 'order_sn',
-				width: 80,
+				title    : '订单编号',
+				key      : 'order_sn',
+				width    : 80,
 				dataIndex: 'order_sn',
 			},
 			{
-				title: '车辆编号',
-				key: 'bike_sn',
-				width: 80,
+				title    : '车辆编号',
+				key      : 'bike_sn',
+				width    : 80,
 				dataIndex: 'bike_sn',
 			},
 			{
-				title: '用户名',
-				key: 'user_name',
-				width: 80,
+				title    : '用户名',
+				key      : 'user_name',
+				width    : 80,
 				dataIndex: 'user_name',
 			},
 			{
-				title: '手机号',
-				key: 'mobile',
-				width: 80,
+				title    : '手机号',
+				key      : 'mobile',
+				width    : 80,
 				dataIndex: 'mobile',
 			},
 			{
-				title: '里程',
-				key: 'distance',
-				width: 80,
+				title    : '里程',
+				key      : 'distance',
+				width    : 80,
 				dataIndex: 'distance',
-				render: distance => {
+				render   : distance => {
 					return `${distance}公里`;
 				},
 			},
 			{
-				title: '行程时间',
-				key: 'total_time',
-				width: 80,
+				title    : '行程时间',
+				key      : 'total_time',
+				width    : 80,
 				dataIndex: 'total_time',
 			},
 			{
-				title: '状态',
-				key: 'status',
-				width: 80,
+				title    : '状态',
+				key      : 'status',
+				width    : 80,
 				dataIndex: 'status',
-				render: status => {
+				render   : status => {
 					let config = {
 						'1': '进行中',
 						'2': '进行中(暂时)',
@@ -195,27 +195,27 @@ export default class Order extends Component {
 				},
 			},
 			{
-				title: '开始时间',
-				key: 'start_time',
-				width: 120,
+				title    : '开始时间',
+				key      : 'start_time',
+				width    : 120,
 				dataIndex: 'start_time',
 			},
 			{
-				title: '结束时间',
-				key: 'end_time',
-				width: 120,
+				title    : '结束时间',
+				key      : 'end_time',
+				width    : 120,
 				dataIndex: 'end_time',
 			},
 			{
-				title: '订单金额',
-				width: 80,
-				key: 'total_fee',
+				title    : '订单金额',
+				width    : 80,
+				key      : 'total_fee',
 				dataIndex: 'total_fee',
 			},
 			{
-				title: '实付金额',
-				width: 80,
-				key: 'user_pay',
+				title    : '实付金额',
+				width    : 80,
+				key      : 'user_pay',
 				dataIndex: 'user_pay',
 			},
 		];
@@ -236,25 +236,25 @@ export default class Order extends Component {
 				</Card>
 				<div className="content-warp">
 					<CTable
-						columns={columns}
-						dataSource={this.state.list}
-						pagination={this.state.pagination}
-						selectedRowKeys={this.state.selectedRowKeys}
-						selectedItem={this.state.selectedItem}
-						selectedIds={this.state.selectedIds}
-						rowSelection={'checkbox'} //单选多选  类型配置
-						updateSelectedItem={Utils.updateSelectedItem.bind(this)} //因为方法中有要更新的this.setstate 必须绑定this指向
+						columns            = {columns}
+						dataSource         = {this.state.list}
+						pagination         = {this.state.pagination}
+						selectedRowKeys    = {this.state.selectedRowKeys}
+						selectedItem       = {this.state.selectedItem}
+						selectedIds        = {this.state.selectedIds}
+						rowSelection       = {'checkbox'}                           //单选多选  类型配置
+						updateSelectedItem = {Utils.updateSelectedItem.bind(this)}  //因为方法中有要更新的this.setstate 必须绑定this指向
 					/>
 				</div>
 				<Modal
-					title="取消订单"
-					visible={this.state.orderConfirmVisble}
-					onCancel={() => {
+					title    = "取消订单"
+					visible  = {this.state.orderConfirmVisble}
+					onCancel = {() => {
 						this.setState({
 							orderConfirmVisble: false,
 						});
 					}}
-					onOk={this.handleOrderFinsh}
+					onOk = {this.handleOrderFinsh}
 				>
 					<Form layout="horizontal">
 						<FormItem label="车辆编号" {...formItemLayout}>
